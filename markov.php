@@ -21,6 +21,23 @@ function generate_markov_table($text, $table) {
     return $table;
 }
 
+function improve_markov_table($text, $table) {
+    
+    $wordsTable = explode(' ',trim($text)); 
+    $tableLength = sizeof($wordsTable);
+    foreach($wordsTable as $key => $word){
+        if($key < $tableLength - 1){
+            $nextWord = $wordsTable[$key + 1];
+            if (isset($table[$word][$nextWord])) {
+                $table[$word][$nextWord] += 1;
+            }
+        }
+    }
+    
+    return $table;
+}
+
+
 function sentenceBegin($str){
 	return $str == ucfirst($str) && strpos($str, '.') === FALSE 
     && strpos($str, ')') === FALSE && strpos($str, '(') === FALSE && strpos($str, "'") === FALSE;

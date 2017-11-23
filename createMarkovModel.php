@@ -12,7 +12,7 @@ require 'markov.php';
 <body>
 <?php
 
-set_time_limit(3600);
+set_time_limit(10800);
 ini_set('memory_limit', '2048M');
 
 $titlesTable = generate_markov_table(file_get_contents("titles.txt"), array());
@@ -20,12 +20,15 @@ file_put_contents("titlesTable.php", '<?php $titlesTable = ' . var_export($title
 $titlesBegin = array_keys(array_filter($titlesTable, "sentenceBegin", ARRAY_FILTER_USE_KEY));
 file_put_contents("titlesBegin.php", '<?php $titlesBegin = ' . var_export($titlesBegin, true) . ';');
 $plotsTable = array();
-for($i = 0; $i < 20; $i++){ // adjust number of iterations for precision, beware of time and RAM consumption
-    $plotsTable = generate_markov_table(file_get_contents("./plots/plots" . $i . ".txt"), $plotsTable);
+for($i = 0; $i < 113; $i++){ // adjust number of iterations for precision, beware of time and RAM consumption
+	if($i < 4)
+    	$plotsTable = generate_markov_table(file_get_contents("./plots/plots" . $i . ".txt"), $plotsTable);
+    else
+    	$plotsTable = improve_markov_table(file_get_contents("./plots/plots" . $i . ".txt"), $plotsTable);
 }
-file_put_contents("plotsTable.php", '<?php $plotsTable = ' . var_export($plotsTable, true) . ';');
+file_put_contents("plotsTableLighter.php", '<?php $plotsTable = ' . var_export($plotsTable, true) . ';');
 $plotsBegin = array_keys(array_filter($plotsTable, "sentenceBegin", ARRAY_FILTER_USE_KEY));
-file_put_contents("plotsBegin.php", '<?php $plotsBegin = ' . var_export($plotsBegin, true) . ';');
+file_put_contents("plotsBeginLighter.php", '<?php $plotsBegin = ' . var_export($plotsBegin, true) . ';');
 echo "<h1>DONE!</h1>";
 
 ?>
